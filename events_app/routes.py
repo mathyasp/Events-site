@@ -42,7 +42,11 @@ def create():
 
         # TODO: Create a new event with the given title, description, & 
         # datetime, then add and commit to the database
-        new_event = Event(title=new_event_title, description=new_event_description, date_and_time=date_and_time)
+        new_event = Event(
+            title=new_event_title, 
+            description=new_event_description, 
+            date_and_time=date_and_time
+        )
         db.session.add(new_event)
         db.session.commit()
 
@@ -67,8 +71,6 @@ def rsvp(event_id):
     """RSVP to an event."""
     # TODO: Get the event with the given id from the database
     event = Event.query.get(event_id)
-    if not event:
-        return render_template('event_detail.html', error='Event not found')
 
     is_returning_guest = request.form.get('returning')
     guest_name = request.form.get('guest_name')
@@ -90,7 +92,11 @@ def rsvp(event_id):
 
         # TODO: Create a new guest with the given name, email, and phone, and 
         # add the event to their events_attending, then commit to the database.
-        new_guest = Guest(name=guest_name, email=guest_email, phone=guest_phone)
+        new_guest = Guest(
+            name=guest_name, 
+            email=guest_email, 
+            phone=guest_phone
+        )
         new_guest.events_attending.append(event)
         db.session.commit()
     
