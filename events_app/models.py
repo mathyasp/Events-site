@@ -1,6 +1,7 @@
 """Create database models to represent tables."""
 from events_app import db
 from sqlalchemy.orm import backref
+import enum
 
 # TODO: Create a model called `Guest` with the following fields:
 # - id: primary key
@@ -27,13 +28,27 @@ class Guest(db.Model):
 # STRETCH CHALLENGE: Add a field `event_type` as an Enum column that denotes the
 # type of event (Party, Study, Networking, etc)
 
+class FormEnum(enum.Enum):
+    """Helper class to make it easier to use enums with forms."""
+    @classmethod
+    def choices(cls):
+        return [(choice.name, choice) for choice in cls]
+
+    def __str__(self):
+        return str(self.value)
+
+class EventType(FormEnum):
+    PARTY = 'Party'
+    STUDY = 'Study'
+    NETWORKING = 'Networking'
+    CLASS = 'Class'
 class Event(db.Model):
     """Event model."""
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(200), nullable=False)
     date_and_time = db.Column(db.DateTime)
-    event_type = db.Column(db.Enum('Party', 'Study', 'Networking', 'Class', name='event_type_enum'))
+    event_type = db.Column(db.Enum(EventType), default=EventType.PARTY)
     guests = db.relationship('Guest', backref='event', secondary='guest_event_table')
 
 # TODO: Create a table `guest_event_table` with the following columns:

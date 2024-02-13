@@ -20,8 +20,18 @@
         <p class="error">Error: {{ error }}</p>
     {% endif %}
     <p>
-        
         <label>
+            Event Type: <br>
+            <select name="event_type">
+                {% for type in EventType %}
+                    <option value="{{ type.name }}">{{ type.value }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            <br> 
+            <br>
             Date and Time: <br>
             <input type="date" name="date" placeholder="Date format YYYY-mm-dd">
             <input type="time" name="time" placeholder="Time format HH:MM">

@@ -2,7 +2,7 @@
 import os
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
-from events_app.models import Event, Guest
+from events_app.models import Event, Guest, EventType
 
 # Import app and db from events_app package so that we can run app
 from events_app import app, db
@@ -31,6 +31,7 @@ def create():
         new_event_description = request.form.get('description')
         date = request.form.get('date')
         time = request.form.get('time')
+        event_type = request.form.get('event_type')
 
         try:
             date_and_time = datetime.strptime(
@@ -45,7 +46,8 @@ def create():
         new_event = Event(
             title=new_event_title, 
             description=new_event_description, 
-            date_and_time=date_and_time
+            date_and_time=date_and_time,
+            event_type = event_type
         )
         db.session.add(new_event)
         db.session.commit()
@@ -53,7 +55,7 @@ def create():
         flash('Event created.')
         return redirect(url_for('main.index'))
     else:
-        return render_template('create.html')
+        return render_template('create.html', EventType=EventType)
 
 
 @main.route('/event/<event_id>', methods=['GET'])
